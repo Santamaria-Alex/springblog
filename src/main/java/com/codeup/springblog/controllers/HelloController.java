@@ -1,6 +1,7 @@
 package com.codeup.springblog.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -12,10 +13,24 @@ public class HelloController {
     }
 
     @GetMapping("/hello/{name}")
-    @ResponseBody
-    public String sayHello(@PathVariable String name){
-        return "Hello " + name + "!";
+    public String sayHello(@PathVariable String name, Model model){
+        model.addAttribute("name", name);
+        return "hello";
     }
+
+    @GetMapping("/join")
+    public String showJoinForm(){
+        return "join";
+    }
+
+    //name inside @RequestParam must be the same as the name value inside the input, or wherever you're wanting to pass this method
+    @PostMapping("/join")
+    public String joinCohort(@RequestParam(name = "cohort") String cohort, Model model){
+        model.addAttribute("cohort", "Welcome to " + cohort + "!");
+        return "join"; //returns everything back into the HTML
+    }
+
+
 
     @GetMapping("/number/{num}")
     @ResponseBody
