@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Dice</title>
+</head>
+<body>
+    <div th:if="${roll}"></div>
+    <div>Dice rolled: <span th:text="${roll}">?</span></div>
+    <div>You guessed: <span th:text="${guess}">!</span></div>
+    <div th:if="${roll} == ${guess}">Sick bro, you're a wizard</div>
+    <div th:if="${roll} != ${guess}">Completely wrong bro, not even close</div>
+
+    <a href="/roll-dice/1">1</a>
+    <a href="/roll-dice/2">2</a>
+    <a href="/roll-dice/3">3</a>
+    <a href="/roll-dice/4">4</a>
+    <a href="/roll-dice/5">5</a>
+    <a href="/roll-dice/6">6</a>
+
+</body>
+</html>
