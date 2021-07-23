@@ -1,6 +1,7 @@
 package com.codeup.springblog.controllers;
 
 import com.codeup.springblog.models.Post;
+import com.codeup.springblog.models.PostRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,20 +11,48 @@ import java.util.List;
 
 @Controller
 public class PostController {
-    List<Post> posts = new ArrayList<>();
+    private final PostRepository postDao;
+
+    public PostController(PostRepository postDao){
+        this.postDao = postDao;
+    }
+
+//    List<Post> posts = new ArrayList<>();
 
     @GetMapping("/posts")
     public String viewPosts(Model model){
-        posts.add(new Post("This is post1", "This is post1s body"));
-        posts.add(new Post("This is post2", "This is post2s body"));
-        model.addAttribute("posts", posts);
+//        posts.add(new Post("This is post1", "This is post1s body"));
+//        posts.add(new Post("This is post2", "This is post2s body"));
+        model.addAttribute("posts", postDao.findAll());
         return "posts/index";
 
     }
 
     @GetMapping("/posts/{id}")
-    public String singlePost(@PathVariable long id){
-        return "View an individual post.";
+    public String singlePost(@PathVariable long id, Model model){
+        model.addAttribute("post", postDao.getById(id));
+        return "posts/show";
+    }
+
+    @GetMapping("/posts/edit/{id}")
+    public String editForm(@PathVariable long id, Model model){
+        model.addAttribute("post", postDao.getById(id));
+        return "posts/edit";
+    }
+
+    @PostMapping("/posts/edit/{id}")
+    public String editPost(@PathVariable long id, @RequestParam String title, @RequestParam String body, Model model){
+        Post post = postDao.getById(id);
+        post.setTitle(title);
+        post.setBody(body);
+        postDao.save(post);
+        return "redirect:/posts";
+    }
+
+    @PostMapping("/posts/delete/{id}")
+    public String delete(@PathVariable long id, Model model){
+        postDao.deleteById(id);
+        return "redirect:/posts";
     }
 
     //when you visit the url you will see the form to create a post.
