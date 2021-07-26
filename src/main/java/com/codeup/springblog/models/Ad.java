@@ -1,29 +1,46 @@
 package com.codeup.springblog.models;
 
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "ads")
+@Table(name="ads")
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    //    to include a column; do not accept null as a value, set a max length
     @Column(nullable = false, length = 140)
     private String title;
 
     @Column(nullable = false)
     private String description;
 
+    @OneToOne
+    private AdImage adImage;
 
-    public Ad(long id, String title, String description) {
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name="ads_categories",
+            joinColumns = {@JoinColumn(name="ad_id")},
+            inverseJoinColumns = {@JoinColumn(name="category_id")}
+    )
+    private List<Category> categories;
+
+    public Ad(){}
+
+    public Ad(long id, String title, String description, AdImage adImage, User user, List<Category> categories) {
         this.id = id;
         this.title = title;
         this.description = description;
-    }
-
-    public Ad() {
+        this.adImage = adImage;
+        this.user = user;
+        this.categories = categories;
     }
 
     public long getId() {
@@ -48,5 +65,29 @@ public class Ad {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public AdImage getAdImage() {
+        return adImage;
+    }
+
+    public void setAdImage(AdImage adImage) {
+        this.adImage = adImage;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 }

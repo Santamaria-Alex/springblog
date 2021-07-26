@@ -1,9 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <title></title>
+    <meta charset="UTF-8">
+    <title>ads</title>
+    <th:block th:include="partials/styles.html  :: styles"></th:block>
 </head>
 <body>
+<th:block th:include="partials/navbar.html :: navbar"></th:block>
+<!--Top-->
+<ul th:each="ad : ${ads}">
+    <li>
+        <!--    Hi-->
+        <a th:href="@{|ads/${ad.getId()}|}"><span th:text="${ad.getTitle()}"></span></a>
+        <!-- Without have to create a method, this should show the username of the user whos id is associated with this ad.-->
+        <p th:text="${ad.user.username}"></p>
+        <!--    Below displays all the categories-->
+        <div th:each="cat : ${ad.categories}">
+            <span th:text="${cat.name}"></span>
+        </div>
+    </li>
+</ul>
+
+<!--Bottom-->
+<!--<th:block th:include="partials/scripts.html  :: bootstrap"></th:block>-->
 </body>
 </html>

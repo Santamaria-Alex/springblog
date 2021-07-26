@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/%22%3E%22%3E">
+<head>
+    <meta charset="UTF-8"/>
+<title>Ad index</title>
+</head>
+<body>
+<h1>Here are all the ads</h1>
+
+<ul th:each="ad: ${ads}">
+    <th:block>
+        <li th:text="${ad.title}"></li>
+        <li th:text="${ad.description}"></li>
+        <li th:text="${ad.user.username}"></li>
+        <!--        prints out each category-->
+        <!--        <li th:each="cat : ${ad.categories}">-->
+        <!--            <span th:text="${cat.name}"></span>-->
+        <!--        </li>-->
+    </th:block>
+
+</ul>
+</body>
+</html>
