@@ -2,6 +2,8 @@ package com.codeup.springblog.controllers;
 
 import com.codeup.springblog.models.Post;
 import com.codeup.springblog.models.PostRepository;
+import com.codeup.springblog.models.User;
+import com.codeup.springblog.models.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,11 @@ import java.util.List;
 @Controller
 public class PostController {
     private final PostRepository postDao;
+    private final UserRepository userDao;
 
-    public PostController(PostRepository postDao){
+    public PostController(PostRepository postDao, UserRepository userDao){
         this.postDao = postDao;
+        this.userDao = userDao;
     }
 
 //    List<Post> posts = new ArrayList<>();
@@ -57,7 +61,6 @@ public class PostController {
 
     //when you visit the url you will see the form to create a post.
     @GetMapping("/posts/create")
-    @ResponseBody
     public String createForm(){
         return "View form to create a post.";
     }
@@ -66,9 +69,11 @@ public class PostController {
     //the information will be posted to the same URL
 //    @RequestMapping(path = "/posts/create", method = RequestMethod.POST)
     @PostMapping("/posts/create")
-    @ResponseBody
-    public String createPost(){
-        return "Create new post.";
+    public String createPost(@RequestParam String title, @RequestParam String body){
+        User user = userDao.getById(1L);
+        Post post = new Post(title, body, user);
+        postDao.save(post);
+        return "redirect:/posts";
     }
 
 

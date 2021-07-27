@@ -15,6 +15,10 @@ public class Post {
     @Column(nullable = false, length = 600)
     private String body;
 
+    @ManyToMany
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Post() {
     }
 
@@ -26,9 +30,10 @@ public class Post {
         this.id = id;
     }
 
-    public Post(String title, String body) {
+    public Post(String title, String body, User user) {
         this.title = title;
         this.body = body;
+        this.user = user;
     }
 
     public String getTitle() {
