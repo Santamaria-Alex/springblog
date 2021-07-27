@@ -5,5 +5,14 @@
     <title></title>
 </head>
 <body>
+<form th:action="@{/posts/create}" th:method="post" th:object="${post}">
+    Title:
+    <input th:field="*{title}" />
+    <br />
+    Body:
+    <input th:field="*{body}" />
+    <br />
+    <input type="submit" />
+</form>
 </body>
 </html>

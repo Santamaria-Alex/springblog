@@ -5,5 +5,14 @@
     <title></title>
 </head>
 <body>
+<form th:action="@{/posts/{id}/edit(id=${id})}" th:method="post" th:object="${post}">
+    Title:
+    <input th:field="*{title}" th:value="*{title}"/>
+    <br />
+    Description:
+    <input th:field="*{body}" th:value="*{title}" />
+    <br />
+    <input type="submit" />
+</form>
 </body>
 </html>
