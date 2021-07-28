@@ -1,11 +1,18 @@
 package com.codeup.springblog.controllers;
 
+import com.codeup.springblog.services.EmailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class HelloController {
+    private final EmailService emailService;
+
+    public HelloController(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
     @GetMapping("/hello")
     @ResponseBody
     public String hello(){
@@ -27,6 +34,7 @@ public class HelloController {
     @PostMapping("/join")
     public String joinCohort(@RequestParam(name = "cohort") String cohort, Model model){
         model.addAttribute("cohort", "Welcome to " + cohort + "!");
+        emailService.prepareAndSend("test@test.com", "Hello, welcome.", "thanks a bunch!");
         return "join"; //returns everything back into the HTML
     }
 
