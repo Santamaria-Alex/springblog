@@ -34,7 +34,7 @@ public class HelloController {
     @PostMapping("/join")
     public String joinCohort(@RequestParam(name = "cohort") String cohort, Model model){
         model.addAttribute("cohort", "Welcome to " + cohort + "!");
-        emailService.prepareAndSend("test@test.com", "Hello, welcome.", "thanks a bunch!");
+//        emailService.prepareAndSend("test@test.com", "Hello, welcome.", "thanks a bunch!");
         return "join"; //returns everything back into the HTML
     }
 
