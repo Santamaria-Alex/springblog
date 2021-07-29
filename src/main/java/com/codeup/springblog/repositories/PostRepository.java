@@ -1,5 +1,6 @@
-package com.codeup.springblog.models;
+package com.codeup.springblog.repositories;
 
+import com.codeup.springblog.models.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 //the long represents the ID, or the point of reference

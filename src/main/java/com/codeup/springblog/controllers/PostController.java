@@ -1,16 +1,14 @@
 package com.codeup.springblog.controllers;
 
 import com.codeup.springblog.models.Post;
-import com.codeup.springblog.models.PostRepository;
+import com.codeup.springblog.repositories.PostRepository;
 import com.codeup.springblog.models.User;
-import com.codeup.springblog.models.UserRepository;
+import com.codeup.springblog.repositories.UserRepository;
 import com.codeup.springblog.services.EmailService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class PostController {
@@ -36,15 +34,28 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}")
-    public String singlePost(@PathVariable long id, Model model){
-        model.addAttribute("post", postDao.getById(id));
+    public String singlePost(@PathVariable long id, Model model) {
+        Post post = postDao.getById(id);
+        boolean isPostOwner = false;
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() != "anonymousUser") {
+            User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            isPostOwner = currentUser.getId() == post.getUser().getId();
+        }
+        model.addAttribute("post", post);
+        model.addAttribute("isPostOwner", isPostOwner);
         return "posts/show";
     }
 
     @GetMapping("/posts/{id}/edit")
-    public String editForm(@PathVariable long id, Model model){
-        model.addAttribute("post", postDao.getById(id));
-        return "posts/edit";
+    public String editForm(@PathVariable long id, Model model) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Post post = postDao.getById(id);
+        if (currentUser.getId() == post.getId()) {
+            model.addAttribute("post", postDao.getById(id));
+            return "posts/edit";
+        } else {
+            return "redirect:/posts/" + id;
+        }
     }
 
     @PostMapping("/posts/{id}/edit")
@@ -56,6 +67,7 @@ public class PostController {
 
     @PostMapping("/posts/delete/{id}")
     public String delete(@PathVariable long id, Model model){
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         postDao.deleteById(id);
         return "redirect:/posts";
     }
